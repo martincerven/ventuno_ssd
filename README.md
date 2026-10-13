@@ -10,7 +10,7 @@ This project implements a **Safe Kernel Handoff Architecture**:
 
 📖 **Full Technical Deep Dive:**
 Read the complete hardware breakdown and architecture post:
-[Qualcomm Dragonwing NVMe Migration: Safe Kernel Handoff Explained]("https://martincerven.com/posts/ventuno_ssd_install/")
+[Qualcomm Dragonwing NVMe Migration: Safe Kernel Handoff Explained](https://martincerven.com/posts/ventuno_ssd_install/)
 
 ---
 
