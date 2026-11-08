@@ -6,7 +6,7 @@ Speedup from using Gen4x4 M.2 NVMe [are roughly 20x](https://youtu.be/_uOX5mGrvH
 
 > [!TIP]
 > Read the complete hardware breakdown and architecture post:
-> [Ventuno Q NVMe Migration blog]("https://martincerven.com/posts/ventuno_ssd_install/")
+> [Ventuno Q NVMe Migration blog](https://martincerven.com/posts/ventuno_ssd_install/)
 
 ---
 
