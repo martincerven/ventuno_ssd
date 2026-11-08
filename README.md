@@ -1,16 +1,12 @@
 # Qualcomm Dragonwing / Ventuno Q: NVMe Rootfs Migration
 
-An automated migration script to clone the root filesystem (`/`) of an **Arduino Ventuno Q / Qualcomm Dragonwing (QCS8275 / IQ8)** from the internal 64 GB eMMC to an M.2 NVMe SSD.
+Script to clone the root filesystem of an **Arduino Ventuno Q** from the internal 64 GB eMMC to an M.2 NVMe SSD.
 
-This project implements a **Safe Kernel Handoff Architecture**:
+Speedup from using Gen4x4 M.2 NVMe [are roughly 20x](https://youtu.be/_uOX5mGrvH0?t=154).
 
-* The UEFI firmware, bootloader, device trees, and hardware calibration partition (`/var/persist`) remain safely on the eMMC.
-* The Linux kernel hands over userspace root (`/`) to the NVMe SSD during early boot.
-* The original eMMC root filesystem is never erased, providing an instant, risk-free rollback path.
-
-📖 **Full Technical Deep Dive:**
-Read the complete hardware breakdown and architecture post:
-[Qualcomm Dragonwing NVMe Migration: Safe Kernel Handoff Explained]("https://martincerven.com/posts/ventuno_ssd_install/")
+> [!TIP]
+> Read the complete hardware breakdown and architecture post:
+> [Ventuno Q NVMe Migration blog]("https://martincerven.com/posts/ventuno_ssd_install/")
 
 ---
 
@@ -20,23 +16,17 @@ Read the complete hardware breakdown and architecture post:
 2. The board must be currently running from the internal eMMC (`/dev/mmcblk0p71`).
 3. Root access (`sudo`).
 
+> [!CAUTION]
+> SSD will be formatted during migration - use fresh SSD or back up your data!
+
 ---
 
 ## Usage
 
-### 1. Download & Prepare the Script
-
-Save the migration script as `migrate_to_nvme.sh` and make it executable:
-
 ```bash
+git clone https://github.com/martincerven/ventuno_ssd.git
+cd ventuno_ssd
 chmod +x migrate_to_nvme.sh
-```
-
-### 2. Execute Migration
-
-Run the script as root:
-
-```bash
 sudo ./migrate_to_nvme.sh
 ```
 
@@ -49,7 +39,7 @@ The script will automatically:
 * Update `/etc/fstab` on the SSD while preserving calibration partitions (`/var/persist`).
 * Configure GRUB on the eMMC (`zz-nvme-root.cfg`) to append the root UUID handoff while preserving all board hardware flags.
 
-### 3. Reboot
+
 
 Once the script prints `[SUCCESS]`, reboot the system:
 

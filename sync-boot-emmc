@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+EMMC_DEV="/dev/mmcblk0p71"
+SYNC_MNT="/run/emmc_boot_sync"
+
+# 1. Only execute if currently booted on NVMe
+CURRENT_ROOT=$(findmnt -n -o SOURCE /)
+if [[ "$CURRENT_ROOT" != *"nvme"* ]]; then
+  echo "[sync-boot-emmc] Not running on NVMe ($CURRENT_ROOT). Skipping sync."
+  exit 0
+fi
+
+# 2. Verify if eMMC root partition is present
+if [ ! -b "$EMMC_DEV" ]; then
+  echo "[-] ERROR: eMMC partition $EMMC_DEV not found!" >&2
+  exit 1
+fi
+
+cleanup() {
+  if mountpoint -q "$SYNC_MNT"; then
+    umount "$SYNC_MNT" || true
+  fi
+  rmdir "$SYNC_MNT" 2>/dev/null || true
+}
+trap cleanup EXIT ERR INT TERM
+
+echo "[+] Syncing /boot from NVMe to eMMC..."
+mkdir -p "$SYNC_MNT"
+mount "$EMMC_DEV" "$SYNC_MNT"
+
+
+rsync -ax --delete /boot/ "$SYNC_MNT/boot/"
+
+sync
+echo "[+] Successfully synced /boot to eMMC."

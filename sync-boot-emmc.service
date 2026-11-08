@@ -1,0 +1,13 @@
+[Unit]
+Description=Sync /boot to eMMC before reboot/shutdown
+DefaultDependencies=no
+Before=reboot.target shutdown.target halt.target poweroff.target
+RequiresMountsFor=/boot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/sync-boot-emmc
+TimeoutSec=60
+
+[Install]
+WantedBy=reboot.target shutdown.target poweroff.target
